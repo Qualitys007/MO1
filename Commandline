@@ -1,0 +1,39 @@
+import os
+import shutil
+from django.core.management.base import BaseCommand
+
+class Command(BaseCommand):
+    help = 'Create folders and move files'
+
+    def handle(self, *args, **kwargs):
+        # Create a folder called M02_CL_Test
+        base_dir = os.path.join(os.path.expanduser('~'), 'Desktop', 'M02_CL_Test')
+        os.makedirs(base_dir, exist_ok=True)
+        self.stdout.write(f"Created directory: {base_dir}")
+
+        # Create a new folder called myfolder inside M02_CL_Test
+        myfolder_dir = os.path.join(base_dir, 'myfolder')
+        os.makedirs(myfolder_dir, exist_ok=True)
+        self.stdout.write(f"Created directory: {myfolder_dir}")
+
+        # Navigate into myfolder and create mytext1.txt
+        mytext1_path = os.path.join(myfolder_dir, 'mytext1.txt')
+        with open(mytext1_path, 'w') as file:
+            file.write('This is mytext1.txt')
+        self.stdout.write(f"Created file: {mytext1_path}")
+
+        # Create moveme.txt inside myfolder
+        moveme_path = os.path.join(myfolder_dir, 'moveme.txt')
+        with open(moveme_path, 'w') as file:
+            file.write('This is moveme.txt')
+        self.stdout.write(f"Created file: {moveme_path}")
+
+        # Move to the parent directory (M02_CL_Test) and create parenttext.txt
+        parenttext_path = os.path.join(base_dir, 'parenttext.txt')
+        with open(parenttext_path, 'w') as file:
+            file.write('This is parenttext.txt')
+        self.stdout.write(f"Created file: {parenttext_path}")
+
+        # Move moveme.txt from myfolder to M02_CL_Test
+        shutil.move(moveme_path, os.path.join(base_dir, 'moveme.txt'))
+        self.stdout.write(f"Moved file: moveme.txt to {base_dir}")
